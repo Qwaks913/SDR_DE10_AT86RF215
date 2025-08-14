@@ -1,0 +1,25 @@
+[Unit]
+Description=SPI Config Daemon
+After=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/finalCombinedTFE/final_c_code_2
+ExecStart=/usr/bin/python3 /root/finalCombinedTFE/final_c_code_2/config_daemon.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+# Environment variables
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# Paramètres de sécurité pour éviter le blocage système
+TimeoutStartSec=30
+TimeoutStopSec=10
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target

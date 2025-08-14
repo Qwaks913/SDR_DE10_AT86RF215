@@ -1,0 +1,72 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 0 0 176 112)
+	(text "myDDR" (rect 64 2 123 18)(font "Dialog" (font_size 10)))
+	(text "inst" (rect 8 97 24 108)(font "Arial" ))
+	(port
+		(pt 0 48)
+		(input)
+		(text "datain[0]" (rect 0 0 60 13)(font "Dialog" (font_size 8)))
+		(text "datain[0]" (rect 4 35 54 47)(font "Dialog" (font_size 8)))
+		(line (pt 0 48)(pt 48 48)(line_width 3))
+	)
+	(port
+		(pt 0 64)
+		(input)
+		(text "inclock" (rect 0 0 47 13)(font "Dialog" (font_size 8)))
+		(text "inclock" (rect 4 51 41 63)(font "Dialog" (font_size 8)))
+		(line (pt 0 64)(pt 48 64))
+	)
+	(port
+		(pt 0 80)
+		(input)
+		(text "aclr" (rect 0 0 24 13)(font "Dialog" (font_size 8)))
+		(text "aclr" (rect 4 67 24 79)(font "Dialog" (font_size 8)))
+		(line (pt 0 80)(pt 48 80))
+	)
+	(port
+		(pt 176 48)
+		(output)
+		(text "dataout_l[0]" (rect 0 0 79 13)(font "Dialog" (font_size 8)))
+		(text "dataout_l[0]" (rect 106 35 172 47)(font "Dialog" (font_size 8)))
+		(line (pt 176 48)(pt 112 48)(line_width 3))
+	)
+	(port
+		(pt 176 64)
+		(output)
+		(text "dataout_h[0]" (rect 0 0 83 13)(font "Dialog" (font_size 8)))
+		(text "dataout_h[0]" (rect 102 51 172 63)(font "Dialog" (font_size 8)))
+		(line (pt 176 64)(pt 112 64)(line_width 3))
+	)
+	(drawing
+		(line (pt 48 32)(pt 112 32))
+		(line (pt 112 32)(pt 112 96))
+		(line (pt 48 96)(pt 112 96))
+		(line (pt 48 32)(pt 48 96))
+		(line (pt 0 0)(pt 176 0))
+		(line (pt 176 0)(pt 176 112))
+		(line (pt 0 112)(pt 176 112))
+		(line (pt 0 0)(pt 0 112))
+	)
+)

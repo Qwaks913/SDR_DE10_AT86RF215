@@ -1,0 +1,78 @@
+//=====================================================================
+//  AT86RF215  ➜  Cyclone-V  LVDS RX  (4 Msamples/s, 32 bits)
+//=====================================================================
+// • Entrées  : rxclk_p/n  (64 MHz), rxd_p/n
+// • Sorties  : iq_word    (32 bits ≡ I[13:0] + Q[13:0] + sync bits)
+//              word_valid (1 cycle à ‘1’ quand iq_word est frais)
+//              sync_ok    (1 = flux synchronisé)
+//=====================================================================
+
+module rf215_lvds_rx
+#(
+    parameter WORD_BITS = 32
+)(
+    input  wire        rst_n,         // reset actif bas
+    // LVDS déjà converti en single-ended par l’IBUF_DIFF
+    input  wire        rxclk,         // 64 MHz venant de RXCLK±
+    input  wire        rxd,           // bit série venant de RXD±
+    // sorties parallèles
+    output reg  [WORD_BITS-1:0] iq_word,
+    output reg                  word_valid,
+    output reg                  sync_ok
+);
+
+    //-----------------------------------------------------------------
+    // 1. Capture DDR : 2 bits (front ↑ et front ↓) via ton méga-fonction
+    //-----------------------------------------------------------------
+    wire [0:0] bit_h, bit_l;          // bus 1 bit chacun
+    wire [1:0] bit_pair;              // {haut, bas}
+
+    myDDR u_ddr (
+        .aclr      (!rst_n),          // ton composant efface sur 1
+        .datain    (rxd),
+        .inclock   (rxclk),
+        .dataout_h (bit_h),
+        .dataout_l (bit_l)
+    );
+
+    assign bit_pair = {bit_h[0], bit_l[0]};   // 2 bits/cycle 64 MHz
+
+    //-----------------------------------------------------------------
+    // 2. Registre décalant 32 bits + compteur de mots
+    //-----------------------------------------------------------------
+    reg [WORD_BITS-1:0] shift   = 0;
+    reg  [4:0]          bit_cnt = 0;  // 0-15 (16 × 2 = 32 bits)
+
+    always @(posedge rxclk or negedge rst_n) begin
+        if (!rst_n) begin
+            shift      <= 0;
+            bit_cnt    <= 0;
+            word_valid <= 1'b0;
+            sync_ok    <= 1'b0;
+        end
+        else begin
+            // décalage : on pousse 2 bits par cycle
+            shift   <= {shift[WORD_BITS-3:0], bit_pair};
+            bit_cnt <= bit_cnt + 1;
+
+            word_valid <= 1'b0;       // par défaut
+
+            if (bit_cnt == 5'd15) begin   // 16 cycles terminés
+                iq_word    <= {shift[WORD_BITS-3:0], bit_pair};
+                word_valid <= 1'b1;
+                bit_cnt    <= 0;
+
+                // test de synchro : bits 31:30 = 10 et 15:14 = 01
+                if ( {shift[WORD_BITS-3:WORD_BITS-4], bit_pair[1]} == 3'b101
+                     && iq_word[15:14] == 2'b01)
+                    sync_ok <= 1'b1;
+                else begin
+                    sync_ok <= 1'b0;
+                    // réalignement simple : on redémarre le comptage
+                    bit_cnt <= 0;
+                end
+            end
+        end
+    end
+
+endmodule

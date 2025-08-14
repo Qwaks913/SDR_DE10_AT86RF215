@@ -1,0 +1,35 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /home/augustin/Documents/TFE/Quartus/SPI_project/clkbuffer.qsys --block-symbol-file --output-directory=/home/augustin/Documents/TFE/Quartus/SPI_project/clkbuffer --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading SPI_project/clkbuffer.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 24.1]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: clkbuffer.altclkctrl_0: Targeting device family: Cyclone V.
+: clkbuffer.altclkctrl_0: Global clock network allows a clock signal to reach all parts of the chip with the same amount of skew. Input port 'clkselect' can be used to switch between four clock inputs.
+: clkbuffer.altclkctrl_0: The register mode of port 'ena' is unavailable while 'ena' port not added. 
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /home/augustin/Documents/TFE/Quartus/SPI_project/clkbuffer.qsys --synthesis=VERILOG --output-directory=/home/augustin/Documents/TFE/Quartus/SPI_project/clkbuffer/synthesis --family="Cyclone V" --part=5CSEBA6U23I7
+Progress: Loading SPI_project/clkbuffer.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 24.1]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: clkbuffer.altclkctrl_0: Targeting device family: Cyclone V.
+: clkbuffer.altclkctrl_0: Global clock network allows a clock signal to reach all parts of the chip with the same amount of skew. Input port 'clkselect' can be used to switch between four clock inputs.
+: clkbuffer.altclkctrl_0: The register mode of port 'ena' is unavailable while 'ena' port not added. 
+Info: clkbuffer: Generating "clkbuffer" for QUARTUS_SYNTH
+Info: altclkctrl_0: Generating top-level entity clkbuffer_altclkctrl_0.
+Info: altclkctrl_0: "clkbuffer" instantiated altclkctrl "altclkctrl_0"
+Info: clkbuffer: Done "clkbuffer" with 2 modules, 2 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

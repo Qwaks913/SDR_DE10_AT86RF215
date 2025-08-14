@@ -1,0 +1,33 @@
+module cs_fuser (
+    input  wire clk_spi,          // SCLK du HPS (mode 0 → front montant = échantillon)
+    input  wire cs_in_n,          // SS0 venant du HPS
+    output reg  cs_out_n = 1'b1,  // vers l'AT86RF215
+    input  wire reset_n
+);
+    reg  [5:0] bitcnt = 0;        // 6 bits → max 64 fronts, suffisant pour bursts courts
+    reg        last_sclk = 0;
+
+    always @(posedge clk_spi or negedge reset_n) begin
+        if (!reset_n) begin
+            cs_out_n <= 1'b1;
+            bitcnt   <= 0;
+        end else begin
+            /* détection descente de CS maître */
+            if (cs_in_n == 1'b0 && cs_out_n == 1'b1) begin
+                cs_out_n <= 1'b0;
+                bitcnt   <= 0;
+            end
+
+            /* incrément à chaque front montant de SCLK tant que CS maître est 0 */
+            if (cs_in_n == 1'b0 && clk_spi & ~last_sclk)
+                bitcnt <= bitcnt + 1'b1;
+            last_sclk <= clk_spi;
+
+            /* si le maître remonte CS OU si plus de 63 bits clocks sans activity
+             * (fin burst block-mode) → relâche CS esclave                      */
+            if (cs_in_n == 1'b1 || bitcnt == 6'd63) begin
+                cs_out_n <= 1'b1;
+            end
+        end
+    end
+endmodule
