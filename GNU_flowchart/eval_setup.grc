@@ -1,0 +1,1048 @@
+options:
+  parameters:
+    author: UCLouvain
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: eval_limesdr
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: LELEC2102 - Decode SDR
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: AGC_on
+  id: variable
+  parameters:
+    comment: "agc_on (d\xE9faut: 1) - Active/d\xE9sactive l'AGC\n\n1 : AGC automatique\
+      \ activ\xE9\n0 : Gain manuel fixe"
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1520, 952.0]
+    rotation: 0
+    state: enabled
+- name: AGC_target
+  id: variable
+  parameters:
+    comment: "(d\xE9faut: 3) - Niveau cible pour l'AGC automatique\nFonctionnalit\xE9\
+      \ d\xE9sactiv\xE9e pour l'instant\n\n0 : -21 dBFS (le plus sensible)\n1 : -24\
+      \ dBFS\n2 : -27 dBFS\n3 : -30 dBFS\n4 : -33 dBFS\n5 : -36 dBFS\n6 : -39 dBFS\n\
+      7 : -42 dBFS (le moins sensible)"
+    value: '3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1744, 952.0]
+    rotation: 0
+    state: enabled
+- name: Enable_detection
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': '0'
+    gui_hint: ''
+    label: ''
+    'true': '1'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 124.0]
+    rotation: 0
+    state: true
+- name: Print_metrics
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': '0'
+    gui_hint: ''
+    label: ''
+    'true': '1'
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1176, 556.0]
+    rotation: 0
+    state: true
+- name: Print_payload
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': '0'
+    gui_hint: ''
+    label: ''
+    'true': '1'
+    type: int
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1336, 556.0]
+    rotation: 0
+    state: true
+- name: carrier_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 868e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 204.0]
+    rotation: 0
+    state: enabled
+- name: center_freq_hz
+  id: variable
+  parameters:
+    comment: ''
+    value: 868e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 676.0]
+    rotation: 0
+    state: true
+- name: chunk_bytes
+  id: variable
+  parameters:
+    comment: '8192 = default value
+
+      dont go further than 16384'
+    value: 8192//8
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 676.0]
+    rotation: 0
+    state: true
+- name: crc_len
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 76.0]
+    rotation: 0
+    state: true
+- name: data_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 50e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 76.0]
+    rotation: 0
+    state: true
+- name: detect_threshold_entry
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 204.0]
+    rotation: 0
+    state: disabled
+- name: detect_threshold_entry
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    entry_signal: editingFinished
+    gui_hint: ''
+    label: Detection Threshold
+    type: real
+    value: 1e-3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 12.0]
+    rotation: 0
+    state: true
+- name: fdev
+  id: variable
+  parameters:
+    comment: ''
+    value: data_rate/4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 140.0]
+    rotation: 0
+    state: true
+- name: hdr_len
+  id: variable
+  parameters:
+    comment: ''
+    value: '8'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 12.0]
+    rotation: 0
+    state: true
+- name: manual_gain
+  id: variable
+  parameters:
+    comment: "manual_gain (d\xE9faut: 10) - Gain fixe en mode manuel\n\n0 : 0 dB (gain\
+      \ minimum)\n23 : 69 dB (gain maximum)\nChaque unit\xE9 = 3 dB de gain"
+    value: '6'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2008, 952.0]
+    rotation: 0
+    state: enabled
+- name: noiseQuery
+  id: variable_qtgui_push_button
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Noise estimation query
+    pressed: '1'
+    released: '0'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 180.0]
+    rotation: 0
+    state: true
+- name: packet_len
+  id: variable
+  parameters:
+    comment: ''
+    value: hdr_len+payload_len+crc_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 76.0]
+    rotation: 0
+    state: true
+- name: payload_len
+  id: variable
+  parameters:
+    comment: ''
+    value: '100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 12.0]
+    rotation: 0
+    state: true
+- name: rx_gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '0'
+    step: '1'
+    stop: '73'
+    value: '10'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 12.0]
+    rotation: 0
+    state: enabled
+- name: rx_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '70'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 140.0]
+    rotation: 0
+    state: disabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: Don't touch this, it's set with sample_rate_register_config variable
+    value: 4000000/sample_rate_register_config
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [968, 676.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate_register_config
+  id: variable
+  parameters:
+    comment: "Defines the RXDFE register value:\n1\t4 000 000 \xE9ch/s\tflux le plus\
+      \ dense, aucun mot bourrage\n2\t2 000 000 \xE9ch/s\tun mot sur deux transmis,\
+      \ 50 % de bourrage\n3\t1 333 333 \xE9ch/s\t(valeur actuelle, 0x83)\n4\t1 000\
+      \ 000 \xE9ch/s\t\n5\t800 000 \xE9ch/s\t\n6\t666 667 \xE9ch/s\t\n7\t571 429 \xE9\
+      ch/s\td\xE9bit mini\n\ncette valeur d\xE9finit directement le samp_rate\nrecommended\
+      \ value : 3"
+    value: '5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 676.0]
+    rotation: 0
+    state: true
+- name: tx_power
+  id: variable_qtgui_entry
+  parameters:
+    comment: ''
+    entry_signal: editingFinished
+    gui_hint: ''
+    label: TX power used (no impact, just for logging)
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 100.0]
+    rotation: 0
+    state: true
+- name: blocks_message_strobe_0
+  id: blocks_message_strobe
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    msg: pmt.intern("TEST")
+    period: '1000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1232, 1288.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle2_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '2048'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 1464.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_to_stream_0
+  id: blocks_vector_to_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '4096'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 920.0]
+    rotation: 0
+    state: disabled
+- name: blocks_vector_to_stream_1_1
+  id: blocks_vector_to_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: chunk_bytes//4
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 1408.0]
+    rotation: 0
+    state: enabled
+- name: dc_blocker_xx_0
+  id: dc_blocker_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '1024'
+    long_form: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: cc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [268.0, 120]
+    rotation: 270
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\n\nclass iq_unpack_cc(gr.sync_block):\n\
+      \    def __init__(self):\n        gr.sync_block.__init__(\n            self,\n\
+      \            name=\"iq_unpack_cc\",\n            in_sig=[(np.uint8, 16384)],\
+      \      # vecteur de 16384 octets\n            out_sig=[(np.complex64, 4096)]\
+      \   # vecteur de 4096 complexes\n        )\n\n    def work(self, input_items,\
+      \ output_items):\n        data = input_items[0]             # vecteur uint8[16384]\n\
+      \        out  = output_items[0]            # vecteur complex64[4096]\n     \
+      \   for i in range(4096):\n            w = (data[4*i]<<24)|(data[4*i+1]<<16)|(data[4*i+2]<<8)|data[4*i+3]\n\
+      \            raw_i = (w>>16)&0x3FFF;  raw_q = w&0x3FFF\n            if raw_i\
+      \ & 0x2000: raw_i |= ~0x3FFF\n            if raw_q & 0x2000: raw_q |= ~0x3FFF\n\
+      \            out[i] = complex(raw_i, raw_q)\n        return 4096  # on a produit\
+      \ 4096 samples\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('iq_unpack_cc', 'iq_unpack_cc', [], [('0', 'byte', 16384)], [('0',
+      'complex', 4096)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 920.0]
+    rotation: 0
+    state: disabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass blk(gr.sync_block):\n\
+      \    \"\"\"\n    Affiche les N premiers octets re\xE7us en hexad\xE9cimal (style\
+      \ hexdump).\n    \"\"\"\n\n    def __init__(self, nbytes=256):\n        gr.sync_block.__init__(self,\n\
+      \            name    = \"udp_hexdump\",\n            in_sig  = [np.uint8], \
+      \  # flux d'octets\n            out_sig = None)         # on ne relaie rien\n\
+      \n        self.limit = nbytes     # nombre d'octets \xE0 afficher\n        self.count\
+      \ = 0\n\n    def work(self, input_items, output_items):\n        data = input_items[0]\n\
+      \n        for b in data:\n            if self.count >= self.limit:\n       \
+      \         continue            # on a d\xE9j\xE0 tout imprim\xE9\n          \
+      \  if self.count % 16 == 0:\n                # nouvelle ligne avec l'offset\n\
+      \                print(f\"{self.count:08x}  \", end='', flush=False)\n     \
+      \       print(f\"{int(b):02x} \", end='', flush=False)\n            self.count\
+      \ += 1\n            if self.count % 16 == 0:\n                print()      \
+      \       # retour ligne\n        return len(data)\n\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nbytes: '10000000000000000000000000'
+  states:
+    _io_cache: "('udp_hexdump', 'blk', [('nbytes', '256')], [('0', 'byte', 1)], [],\
+      \ '\\n    Affiche les N premiers octets re\xE7us en hexad\xE9cimal (style hexdump).\\\
+      n    ', [])"
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 1004.0]
+    rotation: 0
+    state: disabled
+- name: epy_block_2
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass iq13_to_c(gr.sync_block):\n\
+      \    def __init__(self):\n        gr.sync_block.__init__(self,\n           \
+      \ name=\"iq13_to_c_safe\",\n            in_sig=[np.uint8],\n            out_sig=[np.complex64])\n\
+      \        self.buf = bytearray()\n        self.scale = 1.0/4096.0\n\n    def\
+      \ _word_valid(self, w):\n        return (w >> 30) == 0b10 and ((w >> 14) & 0x3)\
+      \ == 0b01\n\n    def _sign13(self, v):\n        return ((v ^ 0x1000) - 0x1000)\n\
+      \n    def work(self, inp, out):\n        self.buf.extend(bytes(inp[0]))\n  \
+      \      produced = 0\n\n        # boucle tant qu\u2019il y a au moins 4 octets\n\
+      \        while len(self.buf) >= 4:\n            w = int.from_bytes(self.buf[:4],\
+      \ 'big')\n\n            if not self._word_valid(w):\n                # mauvais\
+      \ alignement : d\xE9cale d\u2019un octet\n                self.buf.pop(0)\n\
+      \                continue\n\n            # mot OK : on le consomme\n       \
+      \     self.buf = self.buf[4:]\n\n            # I & Q (bit 0 masqu\xE9)\n   \
+      \         i = self._sign13(((w >> 16) & 0x3FFF) >> 1)\n            q = self._sign13((\
+      \ w        & 0x3FFF) >> 1)\n\n            if produced < len(out[0]):\n     \
+      \           out[0][produced] = (i * self.scale) + 1j*(q * self.scale)\n    \
+      \            produced += 1\n            else:\n                break   # tampon\
+      \ sortie plein\n\n        return produced\n\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('iq13_to_c_safe', 'iq13_to_c', [], [('0', 'byte', 1)], [('0', 'complex',
+      1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1184.0]
+    rotation: 0
+    state: disabled
+- name: epy_block_6
+  id: epy_block
+  parameters:
+    _source_code: "############################################################\n\
+      # udp_iq_vec_source_c  \u2013  AT86RF215 \u2192 vecteurs complex64   #\n#  \xB7\
+      \ 1 datagramme UDP  \u27F6  1 vecteur de N samples           #\n#    N = (pkt_size\
+      \ - 8) / 4                                #\n############################################################\n\
+      #\n# @title      UDP IQ Vec Source\n# @category   Sources\n# @description\n\
+      #   Source UDP : transforme chaque datagramme IQ (format AT86RF215)\n#   en\
+      \ un vecteur de type complex64.\n#   La longueur du vecteur est fix\xE9e par\
+      \ pkt_size.\n#   Affiche \xE9galement le nombre d'\xE9chantillons IQ re\xE7\
+      us par seconde.\n#\n# @param port:int=5000                    # Port d\u2019\
+      \xE9coute UDP\n# @param pkt_size:int=1032                # chunk_bytes + 8 (doit\
+      \ v\xE9rifier (pkt_size-8)%4==0)\n# @param queue_len:int=4096              \
+      \ # Profondeur FIFO en vecteurs\n#\n############################################################\n\
+      import socket, struct, threading, logging, numpy as np, queue, time\nfrom gnuradio\
+      \ import gr\n\n_HDR_SIZE   = 8                  # octets (sequence 64 bits)\n\
+      _SOCK_BUF   = 4 * 1024 * 1024    # 4 MiB \u2013 \xE9vite la perte en rafale\n\
+      \n\ndef _signed13_arr(u14: np.ndarray) -> np.ndarray:\n    \"\"\"uint16(14 b)\
+      \ \u279C int16(13 b) sign\xE9\"\"\"\n    s16       = (u14 >> 1).astype(np.int16)\n\
+      \    neg_mask  = (s16 & 0x1000) != 0\n    s16[neg_mask] -= 1 << 13\n    return\
+      \ s16\n\n\nclass blk(gr.sync_block):\n    \"\"\"\n    UDP IQ vector source :\n\
+      \        0 input  \u2013  1 output : (complex64, vec_len)\n    \"\"\"\n    def\
+      \ __init__(self, port: int = 5000, pkt_size: int = 1032, queue_len: int = 4096):\n\
+      \        if (pkt_size - _HDR_SIZE) % 4:\n            raise ValueError(\"pkt_size\
+      \ - 8 doit \xEAtre un multiple de 4\")\n\n        self.port       = int(port)\n\
+      \        self.pkt_size   = int(pkt_size)\n        self.vec_len    = (self.pkt_size\
+      \ - _HDR_SIZE) // 4\n        self._q         = queue.Queue(maxsize=int(queue_len))\n\
+      \        self._seq       = None\n        self._evt       = threading.Event()\n\
+      \        self._sock      = None\n        self._thr       = None\n\n        super().__init__(\"\
+      udp_iq_vec_source_c\",\n                         in_sig=None,\n            \
+      \             out_sig=[(np.complex64, self.vec_len)])\n\n        logging.basicConfig(level=logging.INFO,\n\
+      \                            format=\"%(levelname)s:%(name)s:%(message)s\")\n\
+      \n    # --------------------------------------------------------\n    def start(self):\n\
+      \        self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\n   \
+      \     self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, _SOCK_BUF)\n\
+      \        self._sock.bind((\"\", self.port))\n        self._sock.settimeout(0.5)\n\
+      \n        self._evt.clear()\n        self._thr = threading.Thread(target=self._rx_loop,\
+      \ daemon=True)\n        self._thr.start()\n        logging.info(\"udp_iq_vec_source_c\
+      \ : \xE9coute UDP %d (pkt=%d o, vec=%d)\",\n                     self.port,\
+      \ self.pkt_size, self.vec_len)\n        return super().start()\n\n    # --------------------------------------------------------\n\
+      \    def stop(self):\n        self._evt.set()\n        if self._sock:\n    \
+      \        self._sock.close()\n        if self._thr and self._thr.is_alive():\n\
+      \            self._thr.join(timeout=1.0)\n        return super().stop()\n\n\
+      \    # --------------------------------------------------------\n    def _rx_loop(self):\n\
+      \        hdr_size = _HDR_SIZE\n        vec_len  = self.vec_len\n        pkt_size\
+      \ = self.pkt_size\n\n        rate_t0    = time.time()\n        rate_count =\
+      \ 0\n\n        while not self._evt.is_set():\n            try:\n           \
+      \     dat, _ = self._sock.recvfrom(pkt_size)\n            except socket.timeout:\n\
+      \                continue\n            except OSError:\n                break\n\
+      \n            if len(dat) != pkt_size:\n                logging.warning(\"paquet\
+      \ ignor\xE9 (%d o)\", len(dat))\n                continue\n\n            seq,\
+      \ = struct.unpack_from(\">Q\", dat, 0)\n            if self._seq is None:\n\
+      \                self._seq = seq\n            elif seq != self._seq:\n     \
+      \           logging.warning(\"%d paquet(s) manqu\xE9(s) (att %d, re\xE7u %d)\"\
+      ,\n                                seq - self._seq, self._seq, seq)\n      \
+      \      self._seq = (seq + 1) & 0xFFFFFFFFFFFFFFFF\n\n            # --------\
+      \ Vectorisation NumPy --------\n            words = np.frombuffer(memoryview(dat)[hdr_size:],\n\
+      \                                  dtype=\">u4\", count=vec_len)\n\n       \
+      \     i_raw = (words >> 16) & 0x3FFF     # 14 bits\n            q_raw =  words\
+      \        & 0x3FFF\n\n            i = _signed13_arr(i_raw).astype(np.float32)\
+      \ / 4096.0\n            q = _signed13_arr(q_raw).astype(np.float32) / 4096.0\n\
+      \n            # -------- Compteur de d\xE9bit IQ --------\n            rate_count\
+      \ += vec_len\n            now = time.time()\n            if now - rate_t0 >=\
+      \ 1.0:\n                logging.info(\"D\xE9bit RX : %d \xE9chantillons IQ/s\"\
+      , rate_count)\n                rate_count = 0\n                rate_t0 = now\n\
+      \n            try:\n                self._q.put_nowait((i + 1j*q).astype(np.complex64))\n\
+      \            except queue.Full:\n                logging.warning(\"FIFO pleine\
+      \ \u2192 vecteur perdu\")\n\n    # --------------------------------------------------------\n\
+      \    def work(self, _, out_items):\n        out       = out_items[0]\n     \
+      \   produced  = 0\n        for k in range(len(out)):          # noutput_items\
+      \ en vecteurs\n            try:\n                vec = self._q.get_nowait()\n\
+      \            except queue.Empty:\n                break\n            out[k][:]\
+      \ = vec                # copie directe\n            produced += 1\n        return\
+      \ produced                    # # de vecteurs \xE9crits\n\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pkt_size: chunk_bytes+8
+    port: '5000'
+    queue_len: '4096'
+  states:
+    _io_cache: "('udp_iq_vec_source_c', 'blk', [('port', '5000'), ('pkt_size', '1032'),\
+      \ ('queue_len', '4096')], [], [('0', 'complex', 256)], '\\n    UDP IQ vector\
+      \ source :\\n        0 input  \u2013  1 output : (complex64, vec_len)\\n   \
+      \ ', ['pkt_size', 'port'])"
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 1416.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_7
+  id: epy_block
+  parameters:
+    _source_code: "############################################################\n\
+      # rf215_cfg_sender \u2013 envoie une config uniforme \xAB TXT \xBB\n############################################################\n\
+      import socket, textwrap\nfrom gnuradio import gr\nimport pmt  # port message\
+      \ fictif\n\nIP, PORT = \"10.42.0.78\", 6000\n\n\ndef ccf0_from_freq(f_hz): \
+      \       # pas de 25 kHz\n    return int(round(f_hz / 25_000.0)) & 0xFFFF\n\n\
+      \ndef udp_send(payload: bytes, tag=\"\"):\n    print(f\"[rf215] >>> {tag} ({len(payload)}\
+      \ B)\", flush=True)\n    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\
+      \ as s:\n        s.sendto(payload, (IP, PORT))\n\n\nclass blk(gr.basic_block):\n\
+      \    \"\"\"\n    Envoie un fichier config TXT au daemon RF215 au d\xE9marrage,\n\
+      \    puis 'STOP' \xE0 l'arr\xEAt. 0 entr\xE9e, 0 sortie (port message fictif).\n\
+      \    Param\xE8tres :\n        cf           \u2013 fr\xE9quence centrale (Hz)\
+      \     [default 868e6]\n        chunk        \u2013 taille bloc DMA/UDP (octets)[default\
+      \ 1024]\n        sr           \u2013 code SR (0-7) \u2192 f_s         [default\
+      \ 5 \u2192 800 kS/s]\n        agc_on       \u2013 1 = AGC auto, 0 = manuel \
+      \   [default 0]\n        agc_target   \u2013 TGT (0-7)  \u201321\u2026-42 dBFS\
+      \     [default 4]\n        manual_gain  \u2013 GCW (0-23) pas de 3 dB      [default\
+      \ 17]\n    \"\"\"\n    def __init__(self,\n                 cf=868e6,\n    \
+      \             chunk=1024,\n                 sr=5,\n                 agc_on=0,\n\
+      \                 agc_target=4,\n                 manual_gain=17):\n\n     \
+      \   super().__init__(\"rf215_cfg_sender\", in_sig=None, out_sig=None)\n    \
+      \    self.cf          = float(cf)\n        self.chunk       = int(chunk)\n \
+      \       self.sr          = int(sr) & 0x07\n        self.agc_on      = int(agc_on)\n\
+      \        self.agc_target  = int(agc_target) & 0x07\n        self.manual_gain\
+      \ = int(manual_gain) & 0x1F\n\n        # port message bidon pour \xE9viter le\
+      \ \xAB pruning \xBB GRC\n        self.message_port_register_out(pmt.intern(\"\
+      dummy\"))\n\n    # ------------------------------------------------------------\n\
+      \    def start(self):\n        print(\"[rf215] start()\", flush=True)\n\n  \
+      \      # -----------------------------------------------------------------\n\
+      \        # 1) Valeurs d\xE9riv\xE9es des param\xE8tres\n        # -----------------------------------------------------------------\n\
+      \        ccf0      = ccf0_from_freq(self.cf)\n        rxdfe_val = 0x80 | self.sr\
+      \              # bit7=EN + SR[2:0]\n\n        # -----------------------------------------------------------------\n\
+      \        # 2) Configuration AGC (0x010B / 0x010C)\n        # -----------------------------------------------------------------\n\
+      \        if self.agc_on:\n            # AGC activ\xE9 : EN=1, AVGS=1 (fen\xEA\
+      tre 16 \xE9chantillons)\n            r09_agcc = 0x81                     # 0b0001\
+      \ 0001\n            rf09_agcs = (self.agc_target << 5)  # GCW ignor\xE9 par\
+      \ AGC\n            agc_desc = f\"AGC AUTO, target {self.agc_target}\"\n    \
+      \    else:\n            # AGC manuel : EN=0, gain fixe\n            r09_agcc\
+      \ = 0x00\n            rf09_agcs = (self.agc_target << 5) | self.manual_gain\n\
+      \            agc_desc = (f\"AGC MANUAL, gain {self.manual_gain}\"\n        \
+      \                f\", target bits {self.agc_target}\")\n\n        print(f\"\
+      [rf215] {agc_desc}\", flush=True)\n\n        # -----------------------------------------------------------------\n\
+      \        # 3) Fichier configuration \xAB TXT \xBB\n        # -----------------------------------------------------------------\n\
+      \        cfg_txt = textwrap.dedent(f\"\"\"\\\n            # Update from config_daemon\n\
+      \            chunk_bytes={self.chunk}\n            IQIFC1=0x42\n           \
+      \ CS    =0x08\n            CCF0L =0x{ccf0 & 0xFF:02X}\n            CCF0H =0x{ccf0\
+      \ >> 8:02X}\n            CNL   =0x00\n            CNM   =0x00\n            RXBWC\
+      \ =0x18\n            RXDFE =0x{rxdfe_val:02X}\n            R09_AGCC=0x{r09_agcc:02X}\n\
+      \            RF09_AGCS=0x{rf09_agcs:02X}\n            \"\"\")\n\n        print(\"\
+      [rf215] -------- CONFIG --------\")\n        print(cfg_txt.strip())\n      \
+      \  print(\"--------------------------------\")\n\n        udp_send(cfg_txt.encode(),\
+      \ \"CFG\")\n        return super().start()\n\n    # ------------------------------------------------------------\n\
+      \    def stop(self):\n        print(\"[rf215] stop()\", flush=True)\n      \
+      \  udp_send(b\"STOP\", \"STOP\")\n        return super().stop()\n\n    # (optionnel)\
+      \ \xE9vite les instanciations fant\xF4mes lors de la v\xE9rif GRC\n    def check_topology(self,\
+      \ nin, nout):\n        return nin == nout == 0\n\n"
+    affinity: ''
+    agc_on: AGC_on
+    agc_target: AGC_target
+    alias: ''
+    cf: 868e6
+    chunk: chunk_bytes
+    comment: ''
+    manual_gain: manual_gain
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    sr: sample_rate_register_config
+  states:
+    _io_cache: "('rf215_cfg_sender', 'blk', [('cf', '868000000.0'), ('chunk', '1024'),\
+      \ ('sr', '5'), ('agc_on', '0'), ('agc_target', '4'), ('manual_gain', '17')],\
+      \ [], [('dummy', 'message', 1)], \"\\n    Envoie un fichier config TXT au daemon\
+      \ RF215 au d\xE9marrage,\\n    puis 'STOP' \xE0 l'arr\xEAt. 0 entr\xE9e, 0 sortie\
+      \ (port message fictif).\\n    Param\xE8tres :\\n        cf           \u2013\
+      \ fr\xE9quence centrale (Hz)     [default 868e6]\\n        chunk        \u2013\
+      \ taille bloc DMA/UDP (octets)[default 1024]\\n        sr           \u2013 code\
+      \ SR (0-7) \u2192 f_s         [default 5 \u2192 800 kS/s]\\n        agc_on \
+      \      \u2013 1 = AGC auto, 0 = manuel    [default 0]\\n        agc_target \
+      \  \u2013 TGT (0-7)  \u201321\u2026-42 dBFS     [default 4]\\n        manual_gain\
+      \  \u2013 GCW (0-23) pas de 3 dB      [default 17]\\n    \", ['agc_on', 'agc_target',\
+      \ 'cf', 'chunk', 'manual_gain', 'sr'])"
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 1256.0]
+    rotation: 0
+    state: enabled
+- name: fsk_demodulation_0
+  id: fsk_demodulation
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    crc_len: crc_len
+    drate: data_rate
+    fdev: fdev
+    fsamp: samp_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    payload_len: payload_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [720, 388.0]
+    rotation: 0
+    state: enabled
+- name: fsk_onQuery_noise_estimation_0
+  id: fsk_onQuery_noise_estimation
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n_est: '10'
+    n_samples: '1024'
+    query: noiseQuery
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [88, 492.0]
+    rotation: 0
+    state: true
+- name: fsk_packet_parser_0
+  id: fsk_packet_parser
+  parameters:
+    address: '[0,0,1,1,1,1,1,0,0,0,1,0,1,0,1,0,0,1,0,1,0,1,0,0,1,0,1,1,0,1,1,1]'
+    affinity: ''
+    alias: ''
+    comment: ''
+    crc_len: crc_len
+    hdr_len: hdr_len
+    log_payload: Print_payload
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    payload_len: payload_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [984, 388.0]
+    rotation: 0
+    state: enabled
+- name: fsk_preamble_detect_0
+  id: fsk_preamble_detect
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    drate: data_rate
+    enable: Enable_detection
+    fdev: fdev
+    fsamp: samp_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: packet_len
+    threshold: detect_threshold_entry
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [96, 364.0]
+    rotation: 0
+    state: enabled
+- name: fsk_synchronization_0
+  id: fsk_synchronization
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    drate: data_rate
+    enable_log: Print_metrics
+    fdev: fdev
+    fsamp: samp_rate
+    hdr_len: hdr_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: packet_len
+    tx_power: tx_power
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [448, 372.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 62.5e3
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fir_filter_ccf
+    width: data_rate*1
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [88, 212.0]
+    rotation: 180
+    state: enabled
+- name: network_udp_source_0
+  id: network_udp_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    header: '1'
+    ipv6: 'False'
+    maxoutbuf: '1024'
+    minoutbuf: '256'
+    notify_missed: 'True'
+    payloadsize: chunk_bytes+8
+    port: '5000'
+    src_zeros: 'False'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 972.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_sink_x_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: '1024'
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: SDR signal
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '30'
+    showports: 'False'
+    showrf: 'False'
+    type: complex
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 244.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_sink_x_0_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: '4096'
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: complex
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 956.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_sink_x_1
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: '0'
+    fftsize: '2048'
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '30'
+    showports: 'False'
+    showrf: 'False'
+    type: complex
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 1132.0]
+    rotation: 0
+    state: disabled
+- name: snippet_2
+  id: snippet
+  parameters:
+    alias: ''
+    code: "import socket, textwrap, atexit\nfrom gnuradio import gr, eng_notation\
+      \ as e\n\n# ---------- r\xE9cup\xE8re directement les variables GRC ----------\n\
+      try:\n    center_freq_hz_val = float(center_freq_hz)   # d\xE9j\xE0 d\xE9fini\
+      \ par GRC\n    chunk_bytes_val    = int(chunk_bytes)\nexcept NameError:\n  \
+      \  # Valeurs de secours si on lance le fichier .py \xE0 la main\n    center_freq_hz_val\
+      \ = 868.3e6\n    chunk_bytes_val    = 8192\n# ------------------------------------------------------------\n\
+      \nHPS_IP   = \"10.42.0.78\"\nCFG_PORT = 6000\n\ndef ccf0_from_freq(freq):\n\
+      \    return int(round(freq/25_000.0)) & 0xFFFF\n\ndef build_config_txt(freq_hz,\
+      \ chunk):\n    ccf0 = ccf0_from_freq(freq_hz)\n    return textwrap.dedent(f\"\
+      \"\"\\\n        chunk_bytes={chunk}\n        IQIFC1=0x42\n        CS    =0x08\n\
+      \        CCF0L =0x{ccf0 & 0xFF:02X}\n        CCF0H =0x{(ccf0>>8) & 0xFF:02X}\n\
+      \        CNL   =0x00\n        CNM   =0x00\n        RXBWC =0x18\n        RXDFE\
+      \ =0x83\n        AGCC  =0xFF\n        \"\"\")\n\ndef udp_send(payload: bytes):\n\
+      \    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\n    sock.sendto(payload,\
+      \ (HPS_IP, CFG_PORT))\n    sock.close()\n\n# ---- init : envoi config & d\xE9\
+      marrage du flux ---------------\nudp_send(build_config_txt(center_freq_hz_val,\
+      \ chunk_bytes_val).encode())\n\n# ---- \xE0 la fermeture : STOP ---------------------------------\n\
+      atexit.register(lambda: udp_send(b\"STOP\"))\n\n# ---- bloc \xAB dummy \xBB\
+      \ sans ports I/O --------------------------\nclass blk(gr.basic_block):\n  \
+      \  def __init__(self):\n        gr.basic_block.__init__(self, name=\"rf215_cfg_sender\"\
+      ,\n                                in_sig=None, out_sig=None)"
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 820.0]
+    rotation: 0
+    state: disabled
+- name: zeromq_pub_sink_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:10000
+    affinity: ''
+    alias: ''
+    bind: 'True'
+    comment: ''
+    drop_on_hwm: 'True'
+    hwm: '-1'
+    key: ''
+    pass_tags: 'False'
+    timeout: '100'
+    type: byte
+    vlen: payload_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1264, 380.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_throttle2_0, '0', dc_blocker_xx_0, '0']
+- [blocks_throttle2_0, '0', qtgui_sink_x_0, '0']
+- [blocks_vector_to_stream_0, '0', qtgui_sink_x_0_0, '0']
+- [blocks_vector_to_stream_1_1, '0', blocks_throttle2_0, '0']
+- [dc_blocker_xx_0, '0', low_pass_filter_0, '0']
+- [epy_block_0, '0', blocks_vector_to_stream_0, '0']
+- [epy_block_2, '0', blocks_throttle2_0, '0']
+- [epy_block_6, '0', blocks_vector_to_stream_1_1, '0']
+- [epy_block_7, dummy, blocks_message_strobe_0, set_msg]
+- [fsk_demodulation_0, '0', fsk_packet_parser_0, '0']
+- [fsk_onQuery_noise_estimation_0, NoisePow, fsk_synchronization_0, NoisePow]
+- [fsk_packet_parser_0, '0', zeromq_pub_sink_0, '0']
+- [fsk_preamble_detect_0, '0', fsk_synchronization_0, '0']
+- [fsk_synchronization_0, '0', fsk_demodulation_0, '0']
+- [low_pass_filter_0, '0', fsk_onQuery_noise_estimation_0, '0']
+- [low_pass_filter_0, '0', fsk_preamble_detect_0, '0']
+- [network_udp_source_0, '0', epy_block_0, '0']
+- [network_udp_source_0, '0', epy_block_1, '0']
+- [network_udp_source_0, '0', epy_block_2, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.9.2
