@@ -15,6 +15,7 @@
 #define R_VN       0x000E
 #define R09_IRQS   0x0000
 #define R09_STATE  0x0102
+#define R_IQIFC0   0x000A  // IQ Interface Config 0
 #define R_IQIFC1   0x000B
 #define R09_CS     0x0104
 #define R09_CCF0L  0x0105
@@ -26,6 +27,9 @@
 #define R09_AGCC   0x010B
 #define RF09_AGCS  0x010C      /* RF09 - AGC Status / Gain Control */
 #define R09_CMD    0x0103
+
+// Bit masks for IQIFC0 (verify with datasheet)
+#define IQIFC0_CMV   (1u<<3)   // Common Mode Voltage select (set to 1 for standard LVDS)
 
 // Initialize SPI device, configure transceiver pins
 void spi_init(void);

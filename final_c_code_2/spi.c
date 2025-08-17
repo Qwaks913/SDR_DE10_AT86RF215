@@ -76,6 +76,13 @@ void transceiver_init(void) {
     // Dump IRQ and state after reset
     dump_irq_state("After RESET");
 
+    // Ensure CMV bit set in IQIFC0 (preserve other bits)
+    uint8_t iqifc0 = r8(R_IQIFC0);
+    if (!(iqifc0 & IQIFC0_CMV)) {
+        iqifc0 |= IQIFC0_CMV;
+        w8(R_IQIFC0, iqifc0);
+    }
+
     // Minimal configuration chain
     w8(R_IQIFC1, cfg_IQIFC1);
     w8(R09_CS,    cfg_CS);
